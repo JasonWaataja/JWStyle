@@ -1,0 +1,162 @@
+This document outlines how I prefer to format C++ code. This came out of the
+fact that I wanted a C++ style guide that was codified and not just what I
+thought of in my head. I've read most of the most popular guides, and each of
+them has an element or two that bugs me. I don't expect anyone to read this, but
+I need to write it down somewhere. If anyone really does want to modify any C++
+code I write in the future, they can look at this if they want to. As of this
+time, I wrote C++ in Visual Studio and formatted it nonsensically. When I
+started using GNU/Linux, I used C a lot more. Eventually I started reading style
+guides and found that there were a couple that I could see myself following in
+their entirety. I started wanting to be able to follow a guide down to the
+letter for consistency and having a widespread reference that already points to
+how I write code. However, getting back into writing C++ has led me to try to
+find a guide for this language that instructs me how to format C++ constructs
+and I've found that every guide has something that I simply cannot get behind.
+So, I feel the need to write this down with exactly the rules that I want.
+Interestingly, this isn't an issue for C because there are already styles that I
+can follow completely without felling bad.
+
+
+Introduction
+------------
+
+This is guide takes most of its style from other guides. The purpose of it, in
+fact, is to take ones I like most from each, and improve on them. In addition to
+that, because most of the decisions are arbitrary, a rationale might just be
+that I like it that way, or that's how I'm used to doing it, or that's just how
+they did it another guide. If you're looking for in depth guidelines that are
+applicable to anyone, then this isn't the place.
+
+I've found that most of these recommendations are the same as in the WebKit C++
+style guide. This is a coincidence. This is how I felt like doing things before
+I even read that guide, they just seem to be most closely aligned with me.
+Before I wrote this, I decided to use the guidelines on geosoft.no. Googling
+"C++ style guide" gave the Google C++ standards first and this one second. I
+couldn't tolerate Google, so I read that one and found it to be alright. I also
+read the Mozilla and GCC guidelines. From C, I'm familiar with GNU (oh god),
+Linux style (which is alright), and KNF (which is also alright). A lot of the
+recommendations will be taken from those styles, with the rationale being that
+it makes them more similar because I like some of those styles' elements.
+
+Another thing about many of these guides is that there are some instances that
+simply aren't covered, leaving me unsure what to do. This usually isn't a
+problem with C, but C++ includes some situations that aren't covered in all
+guides. I'll seek to make this one as complete as possible so I come back to it
+later to remind myself.
+
+
+Indentation
+-----------
+
+Indentation is 4 spaces, no tabs. I don't hate tabs, I actually love them. I
+view this holy war as more of a difficult choice between two sides that I want
+strongly to use. On one hand, there's the argument that it lets people choose
+what their indentation level is, which I can really get behind. However, when I
+think about other people reading my code with a different indentation style than
+what I intended, that breaks down. In addition to that, line length limits break
+down unless someone editing the code has the same indentation length as you,
+which I think is an important reason that I never see in the discussion.
+Therefore, spaces it is.
+
+4 spaces is what I chose. Most guides for C++ seem to recommend 2, and many C
+style guides seem to recommend 8. I prefer 4 because I like a wide indentation
+that's easy to see. 8 is a little too extreme and although it's true that 8
+prevents you from going in too deep, I've found that are a few scenarios where
+going 4 levels or deeper in C++ is useful. I am fine with 2 spaces, but
+something doesn't look right about it to me.
+
+The maximum line width is 79. Almost all guides recommend either 79 or 80.
+Limiting yourself to 79 means your code is technically compliant with both of
+those, the only potential difference being the small amount of times you'll have
+to break a line with a one character difference. In addition to that, one of the
+reasons for line limits is that there are uses when having it be limited is
+useful, so I can only assume there is some scenario where 79 makes things
+easier. I'm not sure what they would be, but the decision is arbitrary anyways.
+
+
+Brackets
+--------
+
+In general, opening brackets should be on the same line as whatever construct
+they belong to. The exception is methods/functions. Rationale: Linus Torvalds;
+he gets it in turn from K&R. This is a simple decision, as it seems to be what
+most guides can agree on. The only exception to this is classes. I originally
+thought that class brackets should be on their own line, but I thought about it
+for a while and found that having it on the class line is slightly more
+appealing to me, possibly because of my Java days. This style can be seen in the
+following examples.
+
+if (true) {
+    doOneThing();
+} else (false) {
+    doAnotherThing();
+} else {
+	doOneMoreThing();
+}
+
+while (true) {
+    doAThing();
+    do_another_thing();
+}
+
+class MyClass {
+    member;
+};
+
+struct MyStruct {
+    int member;
+}
+
+void
+printSomething()
+{
+    std::cout << "Something" << std::endl;
+}
+
+Control structures with one line don't require brackets. The question is whether
+or not having an if statement with a part that does require brackets and a part
+that doesn't require brackets should force brackets for the whole statement.
+Different guides take different positions on this, but in the end I think that
+it's fine to omit the brackets and that something like the following looks fine:
+
+if (myVariable) {
+    doAThing();
+    doAnotherThing();
+else
+   doSomethingElse();
+
+
+Naming
+------
+
+Naming is one thing that I've thought about for a while. To start, Google and
+Mozilla's style of CamelCasing method names starting with a capital letter is
+something I find uncomfortable; it goes against both the Java and C naming
+conventions. To tell the truth, I highly prefer the C style of naming variables
+and functions with_all_lowercase_separated_by_underscores. If I had my way,
+everyone would use these for class members, variables, and functions. However,
+every single C++ style guide insists on camelcasing of some sort, and I am used
+to the Java convention of making the first word lowercase. This is also in the
+geosoft guide that I read, as well as some others.
+
+Therefore, variables, methods, and functions are camelCase, with the first word
+lowercase.
+
+Type names are CamelCase with the first word uppercase. This seems to be agreed
+upon.
+
+Now for the more unusual ones where there is less agreement.
+
+First, there don't need to be any sort of prefixes based on type. I just don't
+like it, even if it can be useful.
+
+In addition to that, private variables don't need an underscore either before or
+after. This makes sense in Python where there are needs to be a way to
+distinguish private variables because of the fact that you cannot mark them as
+explicitly private in that language. I don't think it is required in C++ because
+if it is an internal variable, then clients will interact it with getters and
+setters and don't even need to know the internal name of the variable, and it's
+easy enough to recognize that it is a unique type name when looking at an
+internal function.
+
+
